@@ -1,0 +1,360 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100000000000000000000001 /* App/NourishApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000001 /* App/NourishApp.swift */; };
+		100000000000000000000002 /* Models/FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000002 /* Models/FoodItem.swift */; };
+		100000000000000000000003 /* Models/Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* Models/Meal.swift */; };
+		100000000000000000000004 /* Models/WaterEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000004 /* Models/WaterEntry.swift */; };
+		100000000000000000000005 /* DesignSystem/NourishColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000005 /* DesignSystem/NourishColors.swift */; };
+		100000000000000000000006 /* DesignSystem/NourishShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000006 /* DesignSystem/NourishShadow.swift */; };
+		100000000000000000000007 /* DesignSystem/NourishTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000007 /* DesignSystem/NourishTypography.swift */; };
+		100000000000000000000008 /* Components/MealCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000008 /* Components/MealCard.swift */; };
+		100000000000000000000009 /* Components/PastelCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000009 /* Components/PastelCard.swift */; };
+		10000000000000000000000A /* Components/PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000A /* Components/PrimaryButton.swift */; };
+		10000000000000000000000B /* Components/ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000B /* Components/ProgressRing.swift */; };
+		10000000000000000000000C /* Components/WaterDropletsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000C /* Components/WaterDropletsView.swift */; };
+		10000000000000000000000D /* Services/FoodRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000D /* Services/FoodRecognitionService.swift */; };
+		10000000000000000000000E /* Services/NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000E /* Services/NotificationService.swift */; };
+		10000000000000000000000F /* Utilities/DateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000F /* Utilities/DateHelpers.swift */; };
+		100000000000000000000010 /* Utilities/ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* Utilities/ImageStore.swift */; };
+		100000000000000000000011 /* Views/Camera/CameraLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* Views/Camera/CameraLogView.swift */; };
+		100000000000000000000012 /* Views/Home/TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000012 /* Views/Home/TodayView.swift */; };
+		100000000000000000000013 /* Views/Meals/AddMealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000013 /* Views/Meals/AddMealView.swift */; };
+		100000000000000000000014 /* Views/Meals/MealDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000014 /* Views/Meals/MealDetailView.swift */; };
+		100000000000000000000015 /* Views/Meals/MealsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000015 /* Views/Meals/MealsListView.swift */; };
+		100000000000000000000016 /* Views/Profile/ProfileGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000016 /* Views/Profile/ProfileGoalsView.swift */; };
+		100000000000000000000017 /* Views/Progress/ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000017 /* Views/Progress/ProgressView.swift */; };
+		100000000000000000000018 /* Services/PersonalizedCopyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000018 /* Services/PersonalizedCopyService.swift */; };
+		100000000000000000000019 /* Services/FoodParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000019 /* Services/FoodParsingService.swift */; };
+		10000000000000000000001A /* Views/Meals/FoodChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001A /* Views/Meals/FoodChatLogView.swift */; };
+		10000000000000000000001B /* Services/FoodParsingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001B /* Services/FoodParsingRouter.swift */; };
+		10000000000000000000001C /* Services/RuleBasedFoodParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001C /* Services/RuleBasedFoodParsingService.swift */; };
+		10000000000000000000001D /* Services/LocalFoodDatabaseParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001D /* Services/LocalFoodDatabaseParsingService.swift */; };
+		10000000000000000000001E /* Services/SmallModelFoodParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001E /* Services/SmallModelFoodParsingService.swift */; };
+		10000000000000000000001F /* Services/OpenAIFoodParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001F /* Services/OpenAIFoodParsingService.swift */; };
+		100000000000000000000020 /* Utilities/QuantityParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000020 /* Utilities/QuantityParser.swift */; };
+		100000000000000000000021 /* Utilities/FoodMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000021 /* Utilities/FoodMatcher.swift */; };
+		100000000000000000000022 /* Data/FoodNutritionEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000022 /* Data/FoodNutritionEntry.swift */; };
+		100000000000000000000023 /* Data/LocalFoodDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000023 /* Data/LocalFoodDatabase.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		200000000000000000000001 /* App/NourishApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/NourishApp.swift; sourceTree = "<group>"; };
+		200000000000000000000002 /* Models/FoodItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/FoodItem.swift; sourceTree = "<group>"; };
+		200000000000000000000003 /* Models/Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/Meal.swift; sourceTree = "<group>"; };
+		200000000000000000000004 /* Models/WaterEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/WaterEntry.swift; sourceTree = "<group>"; };
+		200000000000000000000005 /* DesignSystem/NourishColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem/NourishColors.swift; sourceTree = "<group>"; };
+		200000000000000000000006 /* DesignSystem/NourishShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem/NourishShadow.swift; sourceTree = "<group>"; };
+		200000000000000000000007 /* DesignSystem/NourishTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem/NourishTypography.swift; sourceTree = "<group>"; };
+		200000000000000000000008 /* Components/MealCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/MealCard.swift; sourceTree = "<group>"; };
+		200000000000000000000009 /* Components/PastelCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/PastelCard.swift; sourceTree = "<group>"; };
+		20000000000000000000000A /* Components/PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/PrimaryButton.swift; sourceTree = "<group>"; };
+		20000000000000000000000B /* Components/ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/ProgressRing.swift; sourceTree = "<group>"; };
+		20000000000000000000000C /* Components/WaterDropletsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/WaterDropletsView.swift; sourceTree = "<group>"; };
+		20000000000000000000000D /* Services/FoodRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/FoodRecognitionService.swift; sourceTree = "<group>"; };
+		20000000000000000000000E /* Services/NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/NotificationService.swift; sourceTree = "<group>"; };
+		20000000000000000000000F /* Utilities/DateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities/DateHelpers.swift; sourceTree = "<group>"; };
+		200000000000000000000010 /* Utilities/ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities/ImageStore.swift; sourceTree = "<group>"; };
+		200000000000000000000011 /* Views/Camera/CameraLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Camera/CameraLogView.swift; sourceTree = "<group>"; };
+		200000000000000000000012 /* Views/Home/TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Home/TodayView.swift; sourceTree = "<group>"; };
+		200000000000000000000013 /* Views/Meals/AddMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Meals/AddMealView.swift; sourceTree = "<group>"; };
+		200000000000000000000014 /* Views/Meals/MealDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Meals/MealDetailView.swift; sourceTree = "<group>"; };
+		200000000000000000000015 /* Views/Meals/MealsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Meals/MealsListView.swift; sourceTree = "<group>"; };
+		200000000000000000000016 /* Views/Profile/ProfileGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Profile/ProfileGoalsView.swift; sourceTree = "<group>"; };
+		200000000000000000000017 /* Views/Progress/ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Progress/ProgressView.swift; sourceTree = "<group>"; };
+		200000000000000000000018 /* Services/PersonalizedCopyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PersonalizedCopyService.swift; sourceTree = "<group>"; };
+		200000000000000000000019 /* Services/FoodParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/FoodParsingService.swift; sourceTree = "<group>"; };
+		20000000000000000000001A /* Views/Meals/FoodChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Meals/FoodChatLogView.swift; sourceTree = "<group>"; };
+		20000000000000000000001B /* Services/FoodParsingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/FoodParsingRouter.swift; sourceTree = "<group>"; };
+		20000000000000000000001C /* Services/RuleBasedFoodParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/RuleBasedFoodParsingService.swift; sourceTree = "<group>"; };
+		20000000000000000000001D /* Services/LocalFoodDatabaseParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/LocalFoodDatabaseParsingService.swift; sourceTree = "<group>"; };
+		20000000000000000000001E /* Services/SmallModelFoodParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SmallModelFoodParsingService.swift; sourceTree = "<group>"; };
+		20000000000000000000001F /* Services/OpenAIFoodParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/OpenAIFoodParsingService.swift; sourceTree = "<group>"; };
+		200000000000000000000020 /* Utilities/QuantityParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities/QuantityParser.swift; sourceTree = "<group>"; };
+		200000000000000000000021 /* Utilities/FoodMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities/FoodMatcher.swift; sourceTree = "<group>"; };
+		200000000000000000000022 /* Data/FoodNutritionEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/FoodNutritionEntry.swift; sourceTree = "<group>"; };
+		200000000000000000000023 /* Data/LocalFoodDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/LocalFoodDatabase.swift; sourceTree = "<group>"; };
+		200000000000000000000024 /* Data/sample_food_training_data.jsonl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Data/sample_food_training_data.jsonl; sourceTree = "<group>"; };
+		300000000000000000000001 /* Nourish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nourish.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		400000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		500000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				500000000000000000000002 /* Nourish */,
+				500000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		500000000000000000000002 /* Nourish */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000001 /* App/NourishApp.swift */,
+				200000000000000000000002 /* Models/FoodItem.swift */,
+				200000000000000000000003 /* Models/Meal.swift */,
+				200000000000000000000004 /* Models/WaterEntry.swift */,
+				200000000000000000000005 /* DesignSystem/NourishColors.swift */,
+				200000000000000000000006 /* DesignSystem/NourishShadow.swift */,
+				200000000000000000000007 /* DesignSystem/NourishTypography.swift */,
+				200000000000000000000008 /* Components/MealCard.swift */,
+				200000000000000000000009 /* Components/PastelCard.swift */,
+				20000000000000000000000A /* Components/PrimaryButton.swift */,
+				20000000000000000000000B /* Components/ProgressRing.swift */,
+				20000000000000000000000C /* Components/WaterDropletsView.swift */,
+				20000000000000000000000D /* Services/FoodRecognitionService.swift */,
+				20000000000000000000000E /* Services/NotificationService.swift */,
+				200000000000000000000018 /* Services/PersonalizedCopyService.swift */,
+				200000000000000000000019 /* Services/FoodParsingService.swift */,
+				20000000000000000000001B /* Services/FoodParsingRouter.swift */,
+				20000000000000000000001C /* Services/RuleBasedFoodParsingService.swift */,
+				20000000000000000000001D /* Services/LocalFoodDatabaseParsingService.swift */,
+				20000000000000000000001E /* Services/SmallModelFoodParsingService.swift */,
+				20000000000000000000001F /* Services/OpenAIFoodParsingService.swift */,
+				20000000000000000000000F /* Utilities/DateHelpers.swift */,
+				200000000000000000000010 /* Utilities/ImageStore.swift */,
+				200000000000000000000020 /* Utilities/QuantityParser.swift */,
+				200000000000000000000021 /* Utilities/FoodMatcher.swift */,
+				200000000000000000000022 /* Data/FoodNutritionEntry.swift */,
+				200000000000000000000023 /* Data/LocalFoodDatabase.swift */,
+				200000000000000000000024 /* Data/sample_food_training_data.jsonl */,
+				200000000000000000000011 /* Views/Camera/CameraLogView.swift */,
+				200000000000000000000012 /* Views/Home/TodayView.swift */,
+				200000000000000000000013 /* Views/Meals/AddMealView.swift */,
+				20000000000000000000001A /* Views/Meals/FoodChatLogView.swift */,
+				200000000000000000000014 /* Views/Meals/MealDetailView.swift */,
+				200000000000000000000015 /* Views/Meals/MealsListView.swift */,
+				200000000000000000000016 /* Views/Profile/ProfileGoalsView.swift */,
+				200000000000000000000017 /* Views/Progress/ProgressView.swift */,
+			);
+			path = Nourish;
+			sourceTree = "<group>";
+		};
+		500000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				300000000000000000000001 /* Nourish.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		600000000000000000000001 /* Nourish */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 700000000000000000000002 /* Build configuration list for PBXNativeTarget "Nourish" */;
+			buildPhases = (
+				800000000000000000000001 /* Sources */,
+				400000000000000000000001 /* Frameworks */,
+				900000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nourish;
+			productName = Nourish;
+			productReference = 300000000000000000000001 /* Nourish.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					600000000000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = 700000000000000000000001 /* Build configuration list for PBXProject "Nourish" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 500000000000000000000001;
+			productRefGroup = 500000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				600000000000000000000001 /* Nourish */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		900000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		800000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000001 /* App/NourishApp.swift in Sources */,
+				100000000000000000000002 /* Models/FoodItem.swift in Sources */,
+				100000000000000000000003 /* Models/Meal.swift in Sources */,
+				100000000000000000000004 /* Models/WaterEntry.swift in Sources */,
+				100000000000000000000005 /* DesignSystem/NourishColors.swift in Sources */,
+				100000000000000000000006 /* DesignSystem/NourishShadow.swift in Sources */,
+				100000000000000000000007 /* DesignSystem/NourishTypography.swift in Sources */,
+				100000000000000000000008 /* Components/MealCard.swift in Sources */,
+				100000000000000000000009 /* Components/PastelCard.swift in Sources */,
+				10000000000000000000000A /* Components/PrimaryButton.swift in Sources */,
+				10000000000000000000000B /* Components/ProgressRing.swift in Sources */,
+				10000000000000000000000C /* Components/WaterDropletsView.swift in Sources */,
+				10000000000000000000000D /* Services/FoodRecognitionService.swift in Sources */,
+				10000000000000000000000E /* Services/NotificationService.swift in Sources */,
+				100000000000000000000018 /* Services/PersonalizedCopyService.swift in Sources */,
+				100000000000000000000019 /* Services/FoodParsingService.swift in Sources */,
+				10000000000000000000001B /* Services/FoodParsingRouter.swift in Sources */,
+				10000000000000000000001C /* Services/RuleBasedFoodParsingService.swift in Sources */,
+				10000000000000000000001D /* Services/LocalFoodDatabaseParsingService.swift in Sources */,
+				10000000000000000000001E /* Services/SmallModelFoodParsingService.swift in Sources */,
+				10000000000000000000001F /* Services/OpenAIFoodParsingService.swift in Sources */,
+				10000000000000000000000F /* Utilities/DateHelpers.swift in Sources */,
+				100000000000000000000010 /* Utilities/ImageStore.swift in Sources */,
+				100000000000000000000020 /* Utilities/QuantityParser.swift in Sources */,
+				100000000000000000000021 /* Utilities/FoodMatcher.swift in Sources */,
+				100000000000000000000022 /* Data/FoodNutritionEntry.swift in Sources */,
+				100000000000000000000023 /* Data/LocalFoodDatabase.swift in Sources */,
+				100000000000000000000011 /* Views/Camera/CameraLogView.swift in Sources */,
+				100000000000000000000012 /* Views/Home/TodayView.swift in Sources */,
+				100000000000000000000013 /* Views/Meals/AddMealView.swift in Sources */,
+				10000000000000000000001A /* Views/Meals/FoodChatLogView.swift in Sources */,
+				100000000000000000000014 /* Views/Meals/MealDetailView.swift in Sources */,
+				100000000000000000000015 /* Views/Meals/MealsListView.swift in Sources */,
+				100000000000000000000016 /* Views/Profile/ProfileGoalsView.swift in Sources */,
+				100000000000000000000017 /* Views/Progress/ProgressView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B00000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4A7DT3TTLV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Nourish;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Nourish can use the camera to attach meal photos for editable food suggestions.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Nourish can access selected photos so you can attach meal images.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.abrahambelayneh.nourish;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B00000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4A7DT3TTLV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Nourish;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Nourish can use the camera to attach meal photos for editable food suggestions.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Nourish can access selected photos so you can attach meal images.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.abrahambelayneh.nourish;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		700000000000000000000001 /* Build configuration list for PBXProject "Nourish" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00000000000000000000001 /* Debug */,
+				B00000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		700000000000000000000002 /* Build configuration list for PBXNativeTarget "Nourish" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B00000000000000000000003 /* Debug */,
+				B00000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}

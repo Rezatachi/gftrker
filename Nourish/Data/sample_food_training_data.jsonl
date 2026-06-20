@@ -1,0 +1,3 @@
+{"text":"I had a cup of yogurt, 3 mochi, and 2 protein bars.","items":[{"food":"Greek yogurt","quantity":"1 cup","grams":225},{"food":"Mochi","quantity":"3 pieces","grams":105},{"food":"Protein bar","quantity":"2 bars","grams":120}]}
+{"text":"two eggs and a banana","items":[{"food":"Eggs","quantity":"2 eggs","grams":100},{"food":"Banana","quantity":"1 banana","grams":118}]}
+{"text":"salmon with rice and broccoli","items":[{"food":"Salmon","quantity":"1 fillet","grams":160},{"food":"Rice","quantity":"1 cup","grams":158},{"food":"Broccoli","quantity":"1 cup","grams":90}]}
