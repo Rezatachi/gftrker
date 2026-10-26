@@ -32,8 +32,11 @@ enum ParsedFoodResultStatus {
     case discarded
 }
 
-struct ParsedFoodItem: Identifiable {
-    let id: UUID
+struct ParsedFoodCandidate: Identifiable {
+    let id: String
+    var providerID: String?
+    var providerDataType: String?
+    var brandOwner: String?
     var name: String
     var detectedQuantity: String
     var estimatedServing: String
@@ -48,7 +51,10 @@ struct ParsedFoodItem: Identifiable {
     var source: FoodLogSource
 
     init(
-        id: UUID = UUID(),
+        id: String,
+        providerID: String? = nil,
+        providerDataType: String? = nil,
+        brandOwner: String? = nil,
         name: String,
         detectedQuantity: String,
         estimatedServing: String,
@@ -60,9 +66,12 @@ struct ParsedFoodItem: Identifiable {
         estimatedCarbs: Double = 0,
         estimatedFat: Double = 0,
         confidence: Double,
-        source: FoodLogSource = .chat
+        source: FoodLogSource
     ) {
         self.id = id
+        self.providerID = providerID
+        self.providerDataType = providerDataType
+        self.brandOwner = brandOwner
         self.name = name
         self.detectedQuantity = detectedQuantity
         self.estimatedServing = estimatedServing
@@ -75,6 +84,96 @@ struct ParsedFoodItem: Identifiable {
         self.estimatedFat = estimatedFat
         self.confidence = confidence
         self.source = source
+    }
+
+    func parsedItem(
+        sourcePhrase: String?,
+        candidateOptions: [ParsedFoodCandidate]
+    ) -> ParsedFoodItem {
+        ParsedFoodItem(
+            name: name,
+            sourcePhrase: sourcePhrase,
+            detectedQuantity: detectedQuantity,
+            estimatedServing: estimatedServing,
+            estimatedGrams: estimatedGrams,
+            minSuggestedGrams: minSuggestedGrams,
+            maxSuggestedGrams: maxSuggestedGrams,
+            estimatedCalories: estimatedCalories,
+            estimatedProtein: estimatedProtein,
+            estimatedCarbs: estimatedCarbs,
+            estimatedFat: estimatedFat,
+            confidence: confidence,
+            source: source,
+            providerCandidateID: id,
+            providerID: providerID,
+            providerDataType: providerDataType,
+            brandOwner: brandOwner,
+            candidateOptions: candidateOptions
+        )
+    }
+}
+
+struct ParsedFoodItem: Identifiable {
+    let id: UUID
+    var name: String
+    var sourcePhrase: String?
+    var detectedQuantity: String
+    var estimatedServing: String
+    var estimatedGrams: Double
+    var minSuggestedGrams: Double
+    var maxSuggestedGrams: Double
+    var estimatedCalories: Int
+    var estimatedProtein: Double
+    var estimatedCarbs: Double
+    var estimatedFat: Double
+    var confidence: Double
+    var source: FoodLogSource
+    var providerCandidateID: String?
+    var providerID: String?
+    var providerDataType: String?
+    var brandOwner: String?
+    var candidateOptions: [ParsedFoodCandidate]
+
+    init(
+        id: UUID = UUID(),
+        name: String,
+        sourcePhrase: String? = nil,
+        detectedQuantity: String,
+        estimatedServing: String,
+        estimatedGrams: Double,
+        minSuggestedGrams: Double,
+        maxSuggestedGrams: Double,
+        estimatedCalories: Int,
+        estimatedProtein: Double,
+        estimatedCarbs: Double = 0,
+        estimatedFat: Double = 0,
+        confidence: Double,
+        source: FoodLogSource = .chat,
+        providerCandidateID: String? = nil,
+        providerID: String? = nil,
+        providerDataType: String? = nil,
+        brandOwner: String? = nil,
+        candidateOptions: [ParsedFoodCandidate] = []
+    ) {
+        self.id = id
+        self.name = name
+        self.sourcePhrase = sourcePhrase
+        self.detectedQuantity = detectedQuantity
+        self.estimatedServing = estimatedServing
+        self.estimatedGrams = estimatedGrams
+        self.minSuggestedGrams = minSuggestedGrams
+        self.maxSuggestedGrams = maxSuggestedGrams
+        self.estimatedCalories = estimatedCalories
+        self.estimatedProtein = estimatedProtein
+        self.estimatedCarbs = estimatedCarbs
+        self.estimatedFat = estimatedFat
+        self.confidence = confidence
+        self.source = source
+        self.providerCandidateID = providerCandidateID
+        self.providerID = providerID
+        self.providerDataType = providerDataType
+        self.brandOwner = brandOwner
+        self.candidateOptions = candidateOptions
     }
 }
 

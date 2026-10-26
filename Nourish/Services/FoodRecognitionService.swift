@@ -12,6 +12,7 @@ protocol FoodRecognitionService {
     func detectFoods(in image: UIImage) async throws -> [FoodDetectionResult]
 }
 
+#if DEBUG
 struct MockFoodRecognitionService: FoodRecognitionService {
     func detectFoods(in image: UIImage) async throws -> [FoodDetectionResult] {
         [
@@ -28,4 +29,4 @@ struct OpenAIFoodRecognitionService: FoodRecognitionService {
         []
     }
 }
-
+#endif

@@ -1,0 +1,480 @@
+[
+  {
+    "message": "1/4 cup granola, some kimchi, handful of oats, 1/8 cup oat milk",
+    "items": [
+      { "name": "Granola", "grams": 28 },
+      { "name": "Kimchi", "grams": 85 },
+      { "name": "Dry oats", "grams": 25 },
+      { "name": "Oat milk", "grams": 30 }
+    ]
+  },
+  {
+    "message": "kimchi and soju",
+    "items": [
+      { "name": "Kimchi", "grams": 85 },
+      { "name": "Soju", "grams": 50 }
+    ]
+  },
+  {
+    "message": "two eggs and a banana",
+    "items": [
+      { "name": "Eggs", "grams": 100, "minConfidence": 0.75, "allowedSources": ["Matched locally"] },
+      { "name": "Banana", "grams": 118, "minConfidence": 0.75, "allowedSources": ["Matched locally"] }
+    ]
+  },
+  {
+    "message": "125g salmon",
+    "items": [
+      { "name": "Salmon", "grams": 125, "minConfidence": 0.75, "allowedSources": ["Matched locally"] }
+    ]
+  },
+  {
+    "message": "3/4 cup granola",
+    "items": [
+      { "name": "Granola", "grams": 83 }
+    ]
+  },
+  {
+    "message": "1 cup rice and 1 cup broccoli",
+    "items": [
+      { "name": "Rice", "grams": 158 },
+      { "name": "Broccoli", "grams": 90 }
+    ]
+  },
+  {
+    "message": "one protein bar",
+    "items": [
+      { "name": "Protein bar", "grams": 60, "minConfidence": 0.75, "allowedSources": ["Matched locally"] }
+    ]
+  },
+  {
+    "message": "half avocado and two slices of toast",
+    "items": [
+      { "name": "Avocado", "grams": 75 },
+      { "name": "Toast", "grams": 70 }
+    ]
+  },
+  {
+    "message": "a bowl of pad thai",
+    "items": [
+      { "name": "Pad Thai", "grams": 380, "minConfidence": 0.75, "allowedSources": ["Matched locally"] }
+    ]
+  },
+  {
+    "message": "1 fillet salmon",
+    "items": [
+      { "name": "Salmon", "grams": 160 }
+    ]
+  },
+  {
+    "message": "a splash of oat milk",
+    "items": [
+      { "name": "Oat milk", "grams": 45 }
+    ]
+  },
+  {
+    "message": "1 tbsp peanut butter",
+    "items": [
+      { "name": "Peanut butter", "grams": 16, "minConfidence": 0.80, "allowedSources": ["Matched locally"] }
+    ]
+  },
+  {
+    "message": "2 mochi",
+    "items": [
+      { "name": "Mochi", "grams": 70 }
+    ]
+  },
+  {
+    "message": "large cold brew",
+    "items": [
+      { "name": "Cold brew", "grams": 590 }
+    ]
+  },
+  {
+    "message": "small salad",
+    "items": [
+      { "name": "Salad", "grams": 135 }
+    ]
+  },
+  {
+    "message": "6 pieces sushi",
+    "items": [
+      { "name": "Sushi roll", "grams": 190 }
+    ]
+  },
+  {
+    "message": "one burger and medium fries",
+    "items": [
+      { "name": "Burger", "grams": 230 },
+      { "name": "Fries", "grams": 115 }
+    ]
+  },
+  {
+    "message": "oikos yogurt",
+    "items": [
+      { "name": "Oikos protein yogurt", "grams": 170 }
+    ]
+  },
+  {
+    "message": "iced oat milk latte",
+    "items": [
+      { "name": "Oat milk latte", "grams": 475 }
+    ]
+  },
+  {
+    "message": "greek yogurt bowl with granola",
+    "items": [
+      { "name": "Yogurt bowl", "grams": 300 },
+      { "name": "Granola", "grams": 55 }
+    ]
+  },
+  {
+    "message": "一碗米饭和两个鸡蛋",
+    "items": [
+      { "name": "Rice", "grams": 220 },
+      { "name": "Eggs", "grams": 100 }
+    ]
+  },
+  {
+    "message": "一杯酸奶",
+    "items": [
+      { "name": "Greek yogurt", "grams": 225 }
+    ]
+  },
+  {
+    "message": "a chicken rice bowl",
+    "items": [
+      { "name": "Chicken rice bowl", "grams": 450 }
+    ]
+  },
+  {
+    "message": "one bottle soju",
+    "items": [
+      { "name": "Soju", "grams": 360 }
+    ]
+  },
+  {
+    "message": "1/2 cup greek yogurt",
+    "items": [
+      { "name": "Greek yogurt", "grams": 112.5 }
+    ]
+  },
+  {
+    "message": "3 protein bars",
+    "items": [
+      { "name": "Protein bar", "grams": 180 }
+    ]
+  },
+  {
+    "message": "1 cup pasta",
+    "items": [
+      { "name": "Pasta", "grams": 140 }
+    ]
+  },
+  {
+    "message": "a plate of pad thai",
+    "items": [
+      { "name": "Pad Thai", "grams": 420 }
+    ]
+  },
+  {
+    "message": "1/2 cup kimchi",
+    "items": [
+      { "name": "Kimchi", "grams": 75 }
+    ]
+  },
+  {
+    "message": "half avocado",
+    "items": [
+      { "name": "Avocado", "grams": 75 }
+    ]
+  },
+  {
+    "message": "one apple",
+    "items": [
+      { "name": "Apple", "grams": 180 }
+    ]
+  },
+  {
+    "message": "a bowl of oatmeal",
+    "items": [
+      { "name": "Oatmeal", "grams": 250 }
+    ]
+  },
+  {
+    "message": "1/2 cup oats",
+    "items": [
+      { "name": "Dry oats", "grams": 40 }
+    ]
+  },
+  {
+    "message": "one jar overnight oats",
+    "items": [
+      { "name": "Overnight oats", "grams": 300 }
+    ]
+  },
+  {
+    "message": "a handful of granola",
+    "items": [
+      { "name": "Granola", "grams": 30 }
+    ]
+  },
+  {
+    "message": "1 tbsp almond butter",
+    "items": [
+      { "name": "Almond butter", "grams": 16 }
+    ]
+  },
+  {
+    "message": "medium sweet potato",
+    "items": [
+      { "name": "Sweet potato", "grams": 130 }
+    ]
+  },
+  {
+    "message": "1 cup tofu",
+    "items": [
+      { "name": "Tofu", "grams": 250 }
+    ]
+  },
+  {
+    "message": "4 oz steak",
+    "items": [
+      { "name": "Steak", "grams": 113 }
+    ]
+  },
+  {
+    "message": "one serving turkey",
+    "items": [
+      { "name": "Turkey", "grams": 113 }
+    ]
+  },
+  {
+    "message": "1 cup cottage cheese",
+    "items": [
+      { "name": "Cottage cheese", "grams": 226 }
+    ]
+  },
+  {
+    "message": "one scoop protein shake",
+    "items": [
+      { "name": "Protein shake", "grams": 31 }
+    ]
+  },
+  {
+    "message": "2 slices avocado toast",
+    "items": [
+      { "name": "Avocado toast", "grams": 240 }
+    ]
+  },
+  {
+    "message": "1 cup milk",
+    "items": [
+      { "name": "Milk", "grams": 244 }
+    ]
+  },
+  {
+    "message": "1 cup almond milk",
+    "items": [
+      { "name": "Almond milk", "grams": 240 }
+    ]
+  },
+  {
+    "message": "medium iced latte",
+    "items": [
+      { "name": "Iced latte", "grams": 475 }
+    ]
+  },
+  {
+    "message": "a poke bowl",
+    "items": [
+      { "name": "Poke bowl", "grams": 500 }
+    ]
+  },
+  {
+    "message": "one turkey sandwich",
+    "items": [
+      { "name": "Turkey sandwich", "grams": 220 }
+    ]
+  },
+  {
+    "message": "a caesar salad bowl",
+    "items": [
+      { "name": "Caesar salad", "grams": 350 }
+    ]
+  },
+  {
+    "message": "two shots of soju",
+    "items": [
+      { "name": "Soju", "grams": 100 }
+    ]
+  },
+  {
+    "message": "a bowl of ramen",
+    "items": [
+      { "name": "Ramen", "grams": 520 }
+    ]
+  },
+  {
+    "message": "beef pho",
+    "items": [
+      { "name": "Pho", "grams": 520 }
+    ]
+  },
+  {
+    "message": "chicken teriyaki bowl",
+    "items": [
+      { "name": "Teriyaki chicken bowl", "grams": 500 }
+    ]
+  },
+  {
+    "message": "kimchi fried rice",
+    "items": [
+      { "name": "Kimchi fried rice", "grams": 380 }
+    ]
+  },
+  {
+    "message": "6 dumplings",
+    "items": [
+      { "name": "Dumplings", "grams": 180 }
+    ]
+  },
+  {
+    "message": "2 bao buns",
+    "items": [
+      { "name": "Bao", "grams": 180 }
+    ]
+  },
+  {
+    "message": "bibimbap",
+    "items": [
+      { "name": "Bibimbap", "grams": 500 }
+    ]
+  },
+  {
+    "message": "onigiri",
+    "items": [
+      { "name": "Onigiri", "grams": 110 }
+    ]
+  },
+  {
+    "message": "miso soup",
+    "items": [
+      { "name": "Miso soup", "grams": 280 }
+    ]
+  },
+  {
+    "message": "kimbap",
+    "items": [
+      { "name": "Kimbap", "grams": 220 }
+    ]
+  },
+  {
+    "message": "bulgogi",
+    "items": [
+      { "name": "Bulgogi", "grams": 220 }
+    ]
+  },
+  {
+    "message": "kimchi jjigae",
+    "items": [
+      { "name": "Kimchi jjigae", "grams": 420 }
+    ]
+  },
+  {
+    "message": "ramyun",
+    "items": [
+      { "name": "Ramyun", "grams": 500 }
+    ]
+  },
+  {
+    "message": "dan dan noodles",
+    "items": [
+      { "name": "Dan dan noodles", "grams": 380 }
+    ]
+  },
+  {
+    "message": "xiao long bao",
+    "items": [
+      { "name": "Xiao long bao", "grams": 180, "acceptableNames": ["Dumplings"] }
+    ]
+  },
+  {
+    "message": "char siu rice",
+    "items": [
+      { "name": "Char siu rice", "grams": 420 }
+    ]
+  },
+  {
+    "message": "bok choy",
+    "items": [
+      { "name": "Bok choy", "grams": 85 }
+    ]
+  },
+  {
+    "message": "spam",
+    "items": [
+      { "name": "Spam", "grams": 84 }
+    ]
+  },
+  {
+    "message": "scallion pancake",
+    "items": [
+      { "name": "Scallion pancakes", "grams": 100 }
+    ]
+  },
+  {
+    "message": "soy milk",
+    "items": [
+      { "name": "Soy milk", "grams": 240 }
+    ]
+  },
+  {
+    "message": "tea egg",
+    "items": [
+      { "name": "Tea egg", "grams": 50 }
+    ]
+  },
+  {
+    "message": "jianbing",
+    "items": [
+      { "name": "Jianbing", "grams": 180 }
+    ]
+  },
+  {
+    "message": "youtiao",
+    "items": [
+      { "name": "Youtiao", "grams": 55 }
+    ]
+  },
+  {
+    "message": "pickled radish",
+    "items": [
+      { "name": "Pickled radish", "grams": 60 }
+    ]
+  },
+  {
+    "message": "kongnamul",
+    "items": [
+      { "name": "Kongnamul", "grams": 90 }
+    ]
+  },
+  {
+    "message": "bibigo dumplings",
+    "items": [
+      { "name": "Bibigo dumplings", "grams": 168 }
+    ]
+  },
+  {
+    "message": "shin ramyun",
+    "items": [
+      { "name": "Shin Ramyun", "grams": 520, "acceptableNames": ["Ramyun"] }
+    ]
+  },
+  {
+    "message": "yakult",
+    "items": [
+      { "name": "Yakult", "grams": 65 }
+    ]
+  }
+]

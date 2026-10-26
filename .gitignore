@@ -25,3 +25,4 @@ playground.xcworkspace
 # Local environment
 .env
 .env.*
+Config/LocalSecrets.xcconfig

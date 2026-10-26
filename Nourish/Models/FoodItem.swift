@@ -73,6 +73,10 @@ enum FoodLogSource: String, Codable, CaseIterable {
     case commonServing = "Estimated from common serving"
     case needsReview = "Needs review"
     case smallModel = "Small model estimate"
+    case localLLM = "Local AI draft"
     case usda = "USDA match"
+    case nutritionix = "Nutritionix match"
+    case openFoodFacts = "Open Food Facts match"
+    case correctionMemory = "Saved correction"
     case imported = "Imported"
 }

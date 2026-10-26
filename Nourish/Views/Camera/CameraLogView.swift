@@ -45,11 +45,11 @@ struct CameraLogView: View {
                 }
 
                 VStack(spacing: 8) {
-                    Text("Snap, suggest, confirm")
+                    Text("Attach, describe, confirm")
                         .font(.system(size: 30, weight: .bold, design: .rounded))
                         .foregroundStyle(NourishColors.ink)
                         .multilineTextAlignment(.center)
-                    Text("Use a meal photo when typing feels slow. Suggestions stay editable and never log automatically.")
+                    Text("Attach a meal photo, enter the foods you recognize, and confirm before saving.")
                         .font(NourishTypography.body)
                         .foregroundStyle(NourishColors.muted)
                         .multilineTextAlignment(.center)
@@ -71,8 +71,8 @@ struct CameraLogView: View {
                     .foregroundStyle(NourishColors.ink)
 
                 CameraStep(icon: "camera.macro", title: "Add a photo", description: "Choose from photos or use the camera.")
-                CameraStep(icon: "sparkles", title: "Review suggestions", description: "Mock AI fills draft foods only.")
-                CameraStep(icon: "checkmark.seal.fill", title: "Confirm calories", description: "You edit the final meal before anything is saved.")
+                CameraStep(icon: "square.and.pencil", title: "Describe the meal", description: "Add foods, servings, and nutrition values.")
+                CameraStep(icon: "checkmark.seal.fill", title: "Confirm calories", description: "Nothing is saved until you confirm.")
             }
         }
     }
@@ -87,10 +87,10 @@ struct CameraLogView: View {
                     .background(.white.opacity(0.72), in: Circle())
 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("Local-first MVP")
+                    Text("Private by default")
                         .font(NourishTypography.section)
                         .foregroundStyle(NourishColors.ink)
-                    Text("Photos and logs stay on device. No account, backend, or API key is required.")
+                    Text("Photos and logs stay on device. No account is required.")
                         .font(NourishTypography.caption)
                         .foregroundStyle(NourishColors.muted)
                 }

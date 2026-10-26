@@ -8,6 +8,7 @@ struct ProfileGoalsView: View {
     @Query private var meals: [Meal]
     @Query private var mealTemplates: [MealTemplate]
     @Query private var waterEntries: [WaterEntry]
+    @Query private var foodCorrections: [FoodCorrection]
     @State private var showingResetConfirmation = false
     @FocusState private var focusedField: PersonalizationField?
 
@@ -26,7 +27,11 @@ struct ProfileGoalsView: View {
                         personalizationCard
                         goalsCard
                         remindersCard
+#if DEBUG
                         parsingCard
+#else
+                        remoteLookupCard
+#endif
                         privacyCard
                         resetCard
                     }
@@ -52,6 +57,7 @@ struct ProfileGoalsView: View {
             } message: {
                 Text("This deletes meals, favorite meal templates, food items, water logs, saved meal photos, and restores default goals.")
             }
+            .onAppear(perform: applyBundledProviderSettings)
         }
     }
 
@@ -298,31 +304,68 @@ struct ProfileGoalsView: View {
                         rescheduleWaterRemindersIfNeeded()
                     }
                 )
+
             }
         }
     }
 
     private var privacyCard: some View {
-        PastelCard(tint: .white) {
-            HStack(spacing: 14) {
-                Image(systemName: "lock.heart.fill")
-                    .font(.system(size: 30, weight: .bold))
-                    .foregroundStyle(NourishColors.magentaBloom)
-                    .frame(width: 56, height: 56)
-                    .background(NourishColors.blushSoft.opacity(0.70), in: Circle())
+        NavigationLink {
+            PrivacyPolicyView()
+        } label: {
+            PastelCard(tint: .white) {
+                HStack(spacing: 14) {
+                    Image(systemName: "lock.heart.fill")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundStyle(NourishColors.magentaBloom)
+                        .frame(width: 56, height: 56)
+                        .background(NourishColors.blushSoft.opacity(0.70), in: Circle())
 
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Private by default")
-                        .font(NourishTypography.section)
-                        .foregroundStyle(NourishColors.ink)
-                    Text("Meals, photos, water, and goals are stored locally for this MVP.")
-                        .font(NourishTypography.caption)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Privacy and data")
+                            .font(NourishTypography.section)
+                            .foregroundStyle(NourishColors.ink)
+                        Text("Logs and photos stay on device. Review remote food lookup and deletion details.")
+                            .font(NourishTypography.caption)
+                            .foregroundStyle(NourishColors.muted)
+                    }
+
+                    Spacer()
+                    Image(systemName: "chevron.right")
                         .foregroundStyle(NourishColors.muted)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var remoteLookupCard: some View {
+        PastelCard(tint: NourishColors.mintSoft.opacity(0.72)) {
+            VStack(alignment: .leading, spacing: 16) {
+                SectionTitle(
+                    icon: "globe",
+                    title: "Packaged food lookup",
+                    subtitle: "Use Open Food Facts when the on-device matcher is unsure."
+                )
+
+                ParserToggleRow(
+                    title: "Open Food Facts",
+                    subtitle: settings.effectiveOpenFoodFactsSearchEnabled
+                        ? "Food search phrases may be sent for nutrition lookup."
+                        : "Only the on-device catalog will be used.",
+                    icon: "globe.americas.fill",
+                    isOn: settings.effectiveOpenFoodFactsSearchEnabled,
+                    accent: NourishColors.blueBell
+                ) {
+                    withAnimation(.spring(response: 0.30, dampingFraction: 0.84)) {
+                        settings.openFoodFactsSearchEnabled = !settings.effectiveOpenFoodFactsSearchEnabled
+                    }
                 }
             }
         }
     }
 
+#if DEBUG
     private var parsingCard: some View {
         PastelCard(tint: NourishColors.blushSoft.opacity(0.72)) {
             VStack(alignment: .leading, spacing: 16) {
@@ -345,6 +388,130 @@ struct ProfileGoalsView: View {
                 }
 
                 ParserToggleRow(
+                    title: "Local AI drafts",
+                    subtitle: settings.effectiveLocalLLMEnabled ? "Uses Ollama when simple local matching is unsure." : "Off by default. Turn on when Ollama is running.",
+                    icon: "desktopcomputer",
+                    isOn: settings.effectiveLocalLLMEnabled,
+                    accent: NourishColors.charcoalBlue
+                ) {
+                    withAnimation(.spring(response: 0.30, dampingFraction: 0.84)) {
+                        settings.localLLMEnabled = !settings.effectiveLocalLLMEnabled
+                    }
+                }
+
+                if settings.effectiveLocalLLMEnabled {
+                    ParserTextField(
+                        title: "Ollama URL",
+                        placeholder: "http://localhost:11434",
+                        icon: "network",
+                        text: Binding(
+                            get: { settings.ollamaBaseURL ?? "" },
+                            set: { settings.ollamaBaseURL = $0 }
+                        ),
+                        focusedField: $focusedField,
+                        field: .ollamaBaseURL
+                    )
+
+                    ParserTextField(
+                        title: "Model",
+                        placeholder: "llama3.2:3b",
+                        icon: "cpu.fill",
+                        text: Binding(
+                            get: { settings.ollamaModel ?? "" },
+                            set: { settings.ollamaModel = $0 }
+                        ),
+                        focusedField: $focusedField,
+                        field: .ollamaModel
+                    )
+
+                    Text("Simulator can use localhost. A physical iPhone needs your Mac LAN URL, like http://192.168.x.x:11434.")
+                        .font(NourishTypography.caption)
+                        .foregroundStyle(NourishColors.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                ParserToggleRow(
+                    title: "Nutritionix natural logging",
+                    subtitle: settings.effectiveNutritionixSearchEnabled ? "Parses multi-food chat with serving estimates." : "Off by default. Adds stronger natural-language nutrition lookup.",
+                    icon: "text.magnifyingglass",
+                    isOn: settings.effectiveNutritionixSearchEnabled,
+                    accent: NourishColors.charcoalBlue
+                ) {
+                    withAnimation(.spring(response: 0.30, dampingFraction: 0.84)) {
+                        settings.nutritionixSearchEnabled = !settings.effectiveNutritionixSearchEnabled
+                    }
+                }
+
+                if settings.effectiveNutritionixSearchEnabled {
+                    ParserTextField(
+                        title: "Nutritionix app id",
+                        placeholder: "App ID",
+                        icon: "app.badge.fill",
+                        text: Binding(
+                            get: { settings.effectiveNutritionixAppID },
+                            set: { settings.nutritionixAppID = $0 }
+                        ),
+                        focusedField: $focusedField,
+                        field: .nutritionixAppID
+                    )
+
+                    ParserTextField(
+                        title: "Nutritionix API key",
+                        placeholder: "API key",
+                        icon: "key.fill",
+                        text: Binding(
+                            get: { settings.effectiveNutritionixAPIKey },
+                            set: { settings.nutritionixAPIKey = $0 }
+                        ),
+                        focusedField: $focusedField,
+                        field: .nutritionixAPIKey
+                    )
+                }
+
+                ParserToggleRow(
+                    title: "USDA catalog search",
+                    subtitle: settings.effectiveUSDASearchEnabled ? "Searches FoodData Central when local matching is unsure." : "Off by default. Adds remote food lookup for dishes like Pad Thai.",
+                    icon: "magnifyingglass.circle.fill",
+                    isOn: settings.effectiveUSDASearchEnabled,
+                    accent: NourishColors.blueBell
+                ) {
+                    withAnimation(.spring(response: 0.30, dampingFraction: 0.84)) {
+                        settings.usdaSearchEnabled = !settings.effectiveUSDASearchEnabled
+                    }
+                }
+
+                if settings.effectiveUSDASearchEnabled {
+                    ParserTextField(
+                        title: "USDA API key",
+                        placeholder: "FoodData Central API key",
+                        icon: "key.fill",
+                        text: Binding(
+                            get: { settings.effectiveUSDAAPIKey },
+                            set: { settings.usdaAPIKey = $0 }
+                        ),
+                        focusedField: $focusedField,
+                        field: .usdaAPIKey
+                    )
+
+                    Text("USDA search is remote. It only stores the confirmed result in your local log.")
+                        .font(NourishTypography.caption)
+                        .foregroundStyle(NourishColors.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                ParserToggleRow(
+                    title: "Open Food Facts",
+                    subtitle: settings.effectiveOpenFoodFactsSearchEnabled ? "Searches global packaged foods when other matchers are unsure." : "Useful for international packaged foods.",
+                    icon: "globe",
+                    isOn: settings.effectiveOpenFoodFactsSearchEnabled,
+                    accent: NourishColors.blueBell
+                ) {
+                    withAnimation(.spring(response: 0.30, dampingFraction: 0.84)) {
+                        settings.openFoodFactsSearchEnabled = !settings.effectiveOpenFoodFactsSearchEnabled
+                    }
+                }
+
+                ParserToggleRow(
                     title: "AI fallback",
                     subtitle: settings.effectiveAIFallbackEnabled ? "Allowed only when local parsing is unsure." : "Off by default. No API call is needed for common foods.",
                     icon: "sparkles",
@@ -358,6 +525,7 @@ struct ProfileGoalsView: View {
             }
         }
     }
+#endif
 
     private var resetCard: some View {
         PastelCard(tint: NourishColors.charcoalBlue.opacity(0.10)) {
@@ -398,6 +566,7 @@ struct ProfileGoalsView: View {
         meals.forEach { modelContext.delete($0) }
         mealTemplates.forEach { modelContext.delete($0) }
         waterEntries.forEach { modelContext.delete($0) }
+        foodCorrections.forEach { modelContext.delete($0) }
 
         if let primarySettings = settingsRows.first {
             primarySettings.dailyCalorieGoal = 2100
@@ -411,9 +580,18 @@ struct ProfileGoalsView: View {
             primarySettings.reminderEndHour = 20
             primarySettings.aiFallbackEnabled = false
             primarySettings.preferLocalParsing = true
+            primarySettings.localLLMEnabled = false
+            primarySettings.ollamaBaseURL = AppConfiguration.defaultOllamaBaseURL.nilIfEmpty
+            primarySettings.ollamaModel = AppConfiguration.defaultOllamaModel.nilIfEmpty
+            primarySettings.usdaSearchEnabled = AppConfiguration.hasUSDAAPIKey
+            primarySettings.usdaAPIKey = AppConfiguration.usdaAPIKey.nilIfEmpty
+            primarySettings.nutritionixSearchEnabled = AppConfiguration.hasNutritionixCredentials
+            primarySettings.nutritionixAppID = AppConfiguration.nutritionixAppID.nilIfEmpty
+            primarySettings.nutritionixAPIKey = AppConfiguration.nutritionixAPIKey.nilIfEmpty
+            primarySettings.openFoodFactsSearchEnabled = true
             settingsRows.dropFirst().forEach { modelContext.delete($0) }
         } else {
-            modelContext.insert(AppSettings())
+            modelContext.insert(AppSettings.withBundledProviderDefaults())
         }
 
         NotificationService.cancelWaterReminders()
@@ -432,14 +610,50 @@ struct ProfileGoalsView: View {
     }
 
     private func ensureSettings() {
-        guard settingsRows.isEmpty else { return }
-        modelContext.insert(AppSettings())
+        guard settingsRows.isEmpty else {
+            applyBundledProviderSettings()
+            return
+        }
+        modelContext.insert(AppSettings.withBundledProviderDefaults())
+    }
+
+    private func applyBundledProviderSettings() {
+        guard let settings = settingsRows.first else { return }
+
+        if settings.usdaAPIKey?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true {
+            settings.usdaAPIKey = AppConfiguration.usdaAPIKey.nilIfEmpty
+        }
+
+        if settings.nutritionixAppID?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true {
+            settings.nutritionixAppID = AppConfiguration.nutritionixAppID.nilIfEmpty
+        }
+
+        if settings.nutritionixAPIKey?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true {
+            settings.nutritionixAPIKey = AppConfiguration.nutritionixAPIKey.nilIfEmpty
+        }
+
+        if settings.openFoodFactsSearchEnabled == nil {
+            settings.openFoodFactsSearchEnabled = true
+        }
+
+        if settings.usdaSearchEnabled == nil, AppConfiguration.hasUSDAAPIKey {
+            settings.usdaSearchEnabled = true
+        }
+
+        if settings.nutritionixSearchEnabled == nil, AppConfiguration.hasNutritionixCredentials {
+            settings.nutritionixSearchEnabled = true
+        }
     }
 }
 
 private enum PersonalizationField: Hashable {
     case partnerName
     case bottleName
+    case ollamaBaseURL
+    case ollamaModel
+    case usdaAPIKey
+    case nutritionixAppID
+    case nutritionixAPIKey
 }
 
 private struct PersonalTextField: View {
@@ -496,6 +710,41 @@ private struct SectionTitle: View {
                     .font(NourishTypography.caption)
                     .foregroundStyle(NourishColors.muted)
             }
+        }
+    }
+}
+
+private struct ParserTextField: View {
+    let title: String
+    let placeholder: String
+    let icon: String
+    @Binding var text: String
+    var focusedField: FocusState<PersonalizationField?>.Binding
+    let field: PersonalizationField
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(NourishTypography.caption)
+                .foregroundStyle(NourishColors.muted)
+
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(NourishColors.charcoalBlue)
+                    .frame(width: 38, height: 38)
+                    .background(.white.opacity(0.66), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+
+                TextField(placeholder, text: $text)
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .foregroundStyle(NourishColors.ink)
+                    .keyboardType(.URL)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .focused(focusedField, equals: field)
+            }
+            .padding(12)
+            .background(.white.opacity(0.58), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
     }
 }

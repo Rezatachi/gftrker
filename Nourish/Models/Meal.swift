@@ -183,6 +183,15 @@ final class AppSettings {
     var reminderEndHour: Int
     var aiFallbackEnabled: Bool?
     var preferLocalParsing: Bool?
+    var localLLMEnabled: Bool?
+    var ollamaBaseURL: String?
+    var ollamaModel: String?
+    var usdaSearchEnabled: Bool?
+    var usdaAPIKey: String?
+    var nutritionixSearchEnabled: Bool?
+    var nutritionixAppID: String?
+    var nutritionixAPIKey: String?
+    var openFoodFactsSearchEnabled: Bool?
 
     init(
         dailyCalorieGoal: Int = 2100,
@@ -196,7 +205,16 @@ final class AppSettings {
         reminderStartHour: Int = 9,
         reminderEndHour: Int = 20,
         aiFallbackEnabled: Bool? = false,
-        preferLocalParsing: Bool? = true
+        preferLocalParsing: Bool? = true,
+        localLLMEnabled: Bool? = false,
+        ollamaBaseURL: String? = nil,
+        ollamaModel: String? = nil,
+        usdaSearchEnabled: Bool? = false,
+        usdaAPIKey: String? = nil,
+        nutritionixSearchEnabled: Bool? = false,
+        nutritionixAppID: String? = nil,
+        nutritionixAPIKey: String? = nil,
+        openFoodFactsSearchEnabled: Bool? = true
     ) {
         self.dailyCalorieGoal = dailyCalorieGoal
         self.dailyWaterGoal = dailyWaterGoal
@@ -210,6 +228,26 @@ final class AppSettings {
         self.reminderEndHour = reminderEndHour
         self.aiFallbackEnabled = aiFallbackEnabled
         self.preferLocalParsing = preferLocalParsing
+        self.localLLMEnabled = localLLMEnabled
+        self.ollamaBaseURL = ollamaBaseURL
+        self.ollamaModel = ollamaModel
+        self.usdaSearchEnabled = usdaSearchEnabled
+        self.usdaAPIKey = usdaAPIKey
+        self.nutritionixSearchEnabled = nutritionixSearchEnabled
+        self.nutritionixAppID = nutritionixAppID
+        self.nutritionixAPIKey = nutritionixAPIKey
+        self.openFoodFactsSearchEnabled = openFoodFactsSearchEnabled
+    }
+
+    static func withBundledProviderDefaults() -> AppSettings {
+        AppSettings(
+            usdaSearchEnabled: AppConfiguration.hasUSDAAPIKey,
+            usdaAPIKey: AppConfiguration.usdaAPIKey.nilIfEmpty,
+            nutritionixSearchEnabled: AppConfiguration.hasNutritionixCredentials,
+            nutritionixAppID: AppConfiguration.nutritionixAppID.nilIfEmpty,
+            nutritionixAPIKey: AppConfiguration.nutritionixAPIKey.nilIfEmpty,
+            openFoodFactsSearchEnabled: true
+        )
     }
 
     var effectiveDailyProteinGoal: Int {
@@ -238,15 +276,72 @@ final class AppSettings {
     }
 
     var effectiveAIFallbackEnabled: Bool {
-        aiFallbackEnabled ?? false
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return false }
+        return aiFallbackEnabled ?? false
     }
 
     var effectivePreferLocalParsing: Bool {
         preferLocalParsing ?? true
     }
 
+    var effectiveLocalLLMEnabled: Bool {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return false }
+        return localLLMEnabled ?? false
+    }
+
+    var effectiveOllamaBaseURL: String {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return "" }
+        let value = sanitized(ollamaBaseURL)
+        return value.isEmpty ? AppConfiguration.defaultOllamaBaseURL : value
+    }
+
+    var effectiveOllamaModel: String {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return "" }
+        let value = sanitized(ollamaModel)
+        return value.isEmpty ? AppConfiguration.defaultOllamaModel : value
+    }
+
+    var effectiveUSDASearchEnabled: Bool {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return false }
+        return usdaSearchEnabled ?? AppConfiguration.hasUSDAAPIKey
+    }
+
+    var effectiveUSDAAPIKey: String {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return "" }
+        let value = sanitized(usdaAPIKey)
+        return value.isEmpty ? AppConfiguration.usdaAPIKey : value
+    }
+
+    var effectiveNutritionixSearchEnabled: Bool {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return false }
+        return nutritionixSearchEnabled ?? AppConfiguration.hasNutritionixCredentials
+    }
+
+    var effectiveNutritionixAppID: String {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return "" }
+        let value = sanitized(nutritionixAppID)
+        return value.isEmpty ? AppConfiguration.nutritionixAppID : value
+    }
+
+    var effectiveNutritionixAPIKey: String {
+        guard AppConfiguration.developerProviderConfigurationEnabled else { return "" }
+        let value = sanitized(nutritionixAPIKey)
+        return value.isEmpty ? AppConfiguration.nutritionixAPIKey : value
+    }
+
+    var effectiveOpenFoodFactsSearchEnabled: Bool {
+        openFoodFactsSearchEnabled ?? true
+    }
+
     private func sanitized(_ value: String?) -> String {
         value?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    }
+}
+
+extension String {
+    var nilIfEmpty: String? {
+        let value = trimmingCharacters(in: .whitespacesAndNewlines)
+        return value.isEmpty ? nil : value
     }
 }
 

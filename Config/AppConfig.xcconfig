@@ -1,0 +1,5 @@
+USDA_API_KEY =
+NUTRITIONIX_APP_ID =
+NUTRITIONIX_API_KEY =
+
+#include? "LocalSecrets.xcconfig"

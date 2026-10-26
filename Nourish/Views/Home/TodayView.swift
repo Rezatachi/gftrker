@@ -2,42 +2,152 @@ import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
+    @Environment(\.modelContext) private var modelContext
     @Query private var settingsRows: [AppSettings]
+    @Query(sort: \WaterEntry.date, order: .reverse) private var waterEntries: [WaterEntry]
     @State private var selectedTab = 0
+    @State private var previousContentTab = 0
+    @State private var waterSpoutActive = false
+    @State private var showingLaunchScreen = true
+    @State private var launchScreenOpacity = 1.0
 
     private var appTheme: AppTheme {
         (settingsRows.first?.themeVariant ?? .sageGreen).palette
     }
 
+    private var settings: AppSettings {
+        settingsRows.first ?? AppSettings()
+    }
+
+    private var hasDrunkWaterToday: Bool {
+        !waterEntries.onDay(.now).isEmpty
+    }
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            TodayView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                .tag(0)
+        ZStack(alignment: .bottom) {
+            TabView(selection: $selectedTab) {
+                TodayView()
+                    .tabItem {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                    .tag(0)
 
-            MealsListView()
-                .tabItem {
-                    Label("Meals", systemImage: "fork.knife")
-                }
-                .tag(1)
+                MealsListView()
+                    .tabItem {
+                        Label("Meals", systemImage: "fork.knife")
+                    }
+                    .tag(1)
 
-            ProgressView()
-                .tabItem {
-                    Label("Progress", systemImage: "chart.xyaxis.line")
-                }
-                .tag(2)
+                WaterTabActionView(isComplete: hasDrunkWaterToday)
+                    .tabItem {
+                        Label(hasDrunkWaterToday ? "Drank" : "Water", systemImage: hasDrunkWaterToday ? "drop.fill" : "drop")
+                    }
+                    .tag(2)
 
-            ProfileGoalsView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.crop.circle")
+                ProgressView()
+                    .tabItem {
+                        Label("Progress", systemImage: "chart.xyaxis.line")
+                    }
+                    .tag(3)
+
+                ProfileGoalsView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person.crop.circle")
+                    }
+                    .tag(4)
+            }
+            .tint(appTheme.accent)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .environment(\.appTheme, appTheme)
+            .onChange(of: selectedTab) { _, newValue in
+                if newValue == 2 {
+                    markWaterDrank()
+                    selectedTab = previousContentTab
+                } else {
+                    previousContentTab = newValue
                 }
-                .tag(3)
+            }
+
+            if waterSpoutActive {
+                WaterSpoutBurst(color: Color(red: 64 / 255, green: 110 / 255, blue: 142 / 255))
+                    .padding(.bottom, 58)
+                    .transition(.scale(scale: 0.72).combined(with: .opacity))
+                    .allowsHitTesting(false)
+            }
+
+            if showingLaunchScreen {
+                LaunchLoadingView()
+                    .opacity(launchScreenOpacity)
+                    .zIndex(20)
+                    .allowsHitTesting(false)
+            }
         }
-        .tint(appTheme.accent)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .environment(\.appTheme, appTheme)
+        .task {
+            guard showingLaunchScreen else { return }
+            try? await Task.sleep(for: .milliseconds(900))
+            await MainActor.run {
+                withAnimation(.easeOut(duration: 0.6)) {
+                    launchScreenOpacity = 0
+                }
+            }
+
+            try? await Task.sleep(for: .milliseconds(350))
+            await MainActor.run {
+                showingLaunchScreen = false
+            }
+        }
+    }
+
+    private func markWaterDrank() {
+        guard !hasDrunkWaterToday else { return }
+        let entry = WaterEntry(glasses: 0, ounces: settings.effectiveDailyWaterGoalOunces)
+        withAnimation(.spring(response: 0.36, dampingFraction: 0.70)) {
+            modelContext.insert(entry)
+            waterSpoutActive = true
+        }
+
+        Task {
+            try? await Task.sleep(for: .milliseconds(1200))
+            await MainActor.run {
+                withAnimation(.easeOut(duration: 0.24)) {
+                    waterSpoutActive = false
+                }
+            }
+        }
+    }
+}
+
+private struct WaterTabActionView: View {
+    let isComplete: Bool
+
+    var body: some View {
+        ZStack {
+            Color.clear.ignoresSafeArea()
+            VStack(spacing: 10) {
+                Image(systemName: isComplete ? "drop.fill" : "drop")
+                    .font(.system(size: 42, weight: .bold))
+                    .foregroundStyle(Color(red: 64 / 255, green: 110 / 255, blue: 142 / 255))
+                Text(isComplete ? "Water is done for today." : "Tap the Water tab to mark today done.")
+                    .font(NourishTypography.body)
+                    .foregroundStyle(NourishColors.muted)
+            }
+            .padding()
+        }
+    }
+}
+
+private struct LaunchLoadingView: View {
+    private let displaySize = CGSize(width: 240, height: 144)
+
+    var body: some View {
+        ZStack {
+            Color(red: 0.98, green: 0.97, blue: 0.94).ignoresSafeArea()
+
+            HorseGallopSpriteView(
+                displayWidth: displaySize.width,
+                displayHeight: displaySize.height
+            )
+        }
     }
 }
 
@@ -373,6 +483,47 @@ struct TodayView: View {
             showingWaterUndo = false
             waterUndoToken = UUID()
         }
+    }
+}
+
+private struct WaterSpoutBurst: View {
+    let color: Color
+    @State private var spraying = false
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(color.opacity(0.55))
+                .frame(width: 8, height: 28)
+                .offset(y: spraying ? -34 : -16)
+                .scaleEffect(y: spraying ? 1.15 : 0.35, anchor: .bottom)
+                .opacity(spraying ? 0 : 0.9)
+
+            ForEach(0..<6, id: \.self) { index in
+                Circle()
+                    .fill(color.opacity(0.72))
+                    .frame(width: CGFloat(5 + index % 3), height: CGFloat(5 + index % 3))
+                    .offset(
+                        x: spraying ? xOffset(index) : 0,
+                        y: spraying ? yOffset(index) : -13
+                    )
+                    .opacity(spraying ? 0 : 1)
+            }
+        }
+        .allowsHitTesting(false)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.78)) {
+                spraying = true
+            }
+        }
+    }
+
+    private func xOffset(_ index: Int) -> CGFloat {
+        [-22, -13, -4, 8, 17, 24][index]
+    }
+
+    private func yOffset(_ index: Int) -> CGFloat {
+        [-26, -39, -49, -45, -35, -24][index]
     }
 }
 

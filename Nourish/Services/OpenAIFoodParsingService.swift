@@ -1,5 +1,6 @@
 import Foundation
 
+#if DEBUG
 struct OpenAIFoodParsingService: FoodParsingService {
     func parseFoodLogMessage(_ text: String) async throws -> ParsedFoodResult {
         /*
@@ -32,3 +33,4 @@ struct OpenAIFoodParsingService: FoodParsingService {
         throw FoodParsingError.unavailable
     }
 }
+#endif

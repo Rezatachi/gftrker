@@ -22,8 +22,8 @@ struct ProgressView: View {
         return Int((lastSevenDays.reduce(0) { $0 + $1.protein } / Double(lastSevenDays.count)).rounded())
     }
 
-    private var hydrationDaysHit: Int {
-        lastSevenDays.filter { $0.waterOunces >= settings.effectiveDailyWaterGoalOunces }.count
+    private var waterDrankDays: Int {
+        lastSevenDays.filter(\.waterDrank).count
     }
 
     var body: some View {
@@ -72,9 +72,9 @@ struct ProgressView: View {
 
                 ProgressMetricCard(
                     icon: "drop.fill",
-                    title: "Hydration wins",
-                    value: "\(hydrationDaysHit)/7",
-                    detail: "goal days",
+                    title: "Water drank",
+                    value: "\(waterDrankDays)/7",
+                    detail: "days marked",
                     tint: NourishColors.mintSoft,
                     accent: NourishColors.blueBell
                 )
@@ -161,37 +161,40 @@ struct ProgressView: View {
             VStack(alignment: .leading, spacing: 16) {
                 ChartHeader(
                     icon: "drop.fill",
-                    title: "Hydration consistency",
-                    subtitle: "Goal: \(settings.effectiveDailyWaterGoalOunces) oz"
+                    title: "Water drank",
+                    subtitle: "One clean check per day"
                 )
 
-                Chart(lastSevenDays, id: \.date) { day in
-                    BarMark(
-                        x: .value("Day", day.date, unit: .day),
-                        y: .value("Ounces", day.waterOunces)
-                    )
-                    .foregroundStyle(day.waterOunces >= settings.effectiveDailyWaterGoalOunces ? NourishColors.blueBell : NourishColors.mint)
+                HStack(spacing: 8) {
+                    ForEach(lastSevenDays, id: \.date) { day in
+                        WaterDrankDayCell(day: day)
+                    }
+                }
+                .frame(maxWidth: .infinity)
 
-                    RuleMark(y: .value("Goal", settings.effectiveDailyWaterGoalOunces))
-                        .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 5]))
-                        .foregroundStyle(NourishColors.charcoalBlue.opacity(0.30))
-                }
-                .frame(height: 220)
-                .chartYAxis {
-                    AxisMarks(position: .leading) { _ in
-                        AxisGridLine().foregroundStyle(NourishColors.line.opacity(0.45))
-                        AxisValueLabel()
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(waterDrankDays)")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundStyle(NourishColors.ink)
+                        Text("days marked this week")
+                            .font(NourishTypography.caption)
                             .foregroundStyle(NourishColors.muted)
                     }
+
+                    Spacer()
+
+                    Text(lastSevenDays.last?.waterDrank == true ? "Today is done." : "Today still needs a tap.")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(lastSevenDays.last?.waterDrank == true ? NourishColors.blueBell : NourishColors.muted)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 9)
+                        .background(.white.opacity(0.66), in: Capsule())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
                 }
-                .chartXAxis {
-                    AxisMarks(values: .stride(by: .day)) { _ in
-                        AxisValueLabel(format: .dateTime.weekday(.narrow))
-                            .font(.system(size: 11, weight: .bold, design: .rounded))
-                            .foregroundStyle(NourishColors.muted)
-                    }
-                }
+                .padding(14)
+                .background(.white.opacity(0.54), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             }
         }
     }
@@ -326,9 +329,51 @@ private struct ChartHeader: View {
     }
 }
 
+private struct WaterDrankDayCell: View {
+    let day: DayMetric
+
+    private var weekday: String {
+        day.date.formatted(.dateTime.weekday(.narrow))
+    }
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(day.waterDrank ? NourishColors.blueBell : .white.opacity(0.64))
+                    .frame(height: 54)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(.white.opacity(day.waterDrank ? 0.45 : 0.82), lineWidth: 1)
+                    )
+
+                ZStack {
+                    Image(systemName: day.waterDrank ? "drop.fill" : "drop")
+                        .font(.system(size: 20, weight: .bold))
+                    if day.waterDrank {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .black))
+                            .offset(y: 1)
+                    }
+                }
+                .foregroundStyle(day.waterDrank ? .white : NourishColors.muted.opacity(0.58))
+            }
+
+            Text(weekday)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundStyle(day.waterDrank ? NourishColors.blueBell : NourishColors.muted)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
 private struct DayMetric {
     let date: Date
     let calories: Int
     let protein: Double
     let waterOunces: Int
+
+    var waterDrank: Bool {
+        waterOunces > 0
+    }
 }

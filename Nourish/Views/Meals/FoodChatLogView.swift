@@ -32,9 +32,25 @@ struct FoodChatLogView: View {
     }
 
     private var parsingService: FoodParsingService {
-        FoodParsingRouter(
-            preferLocalParsing: settings.effectivePreferLocalParsing,
-            aiFallbackEnabled: settings.effectiveAIFallbackEnabled
+        correctionMemoryService
+    }
+
+    private var correctionMemoryService: FoodCorrectionMemoryService {
+        FoodCorrectionMemoryService(
+            parser: FoodParsingRouter(
+                preferLocalParsing: settings.effectivePreferLocalParsing,
+                aiFallbackEnabled: settings.effectiveAIFallbackEnabled,
+                localLLMEnabled: settings.effectiveLocalLLMEnabled,
+                ollamaBaseURL: settings.effectiveOllamaBaseURL,
+                ollamaModel: settings.effectiveOllamaModel,
+                usdaSearchEnabled: settings.effectiveUSDASearchEnabled,
+                usdaAPIKey: settings.effectiveUSDAAPIKey,
+                nutritionixSearchEnabled: settings.effectiveNutritionixSearchEnabled,
+                nutritionixAppID: settings.effectiveNutritionixAppID,
+                nutritionixAPIKey: settings.effectiveNutritionixAPIKey,
+                openFoodFactsSearchEnabled: settings.effectiveOpenFoodFactsSearchEnabled
+            ),
+            store: FoodCorrectionStoreProvider.shared
         )
     }
 
@@ -276,6 +292,37 @@ struct FoodChatLogView: View {
 
     private func saveParsedMeal() {
         guard !reviewItems.isEmpty else { return }
+        let confirmedResult = parsedResult.map { originalResult in
+            ParsedFoodResult(
+                id: originalResult.id,
+                originalText: originalResult.originalText,
+                items: reviewItems.map { draft in
+                    ParsedFoodItem(
+                        id: draft.id,
+                        name: draft.name.trimmingCharacters(in: .whitespacesAndNewlines),
+                        sourcePhrase: draft.sourcePhrase,
+                        detectedQuantity: draft.detectedQuantity,
+                        estimatedServing: draft.estimatedServing,
+                        estimatedGrams: draft.estimatedGrams,
+                        minSuggestedGrams: min(draft.minSuggestedGrams, draft.estimatedGrams),
+                        maxSuggestedGrams: max(draft.maxSuggestedGrams, draft.estimatedGrams),
+                        estimatedCalories: draft.scaledCalories,
+                        estimatedProtein: draft.scaledProtein,
+                        estimatedCarbs: draft.scaledCarbs,
+                        estimatedFat: draft.scaledFat,
+                        confidence: max(draft.confidence, 0.95),
+                        source: draft.source,
+                        providerCandidateID: draft.providerCandidateID,
+                        providerID: draft.providerID,
+                        providerDataType: draft.providerDataType,
+                        brandOwner: draft.brandOwner,
+                        candidateOptions: draft.candidateOptions
+                    )
+                },
+                createdAt: originalResult.createdAt,
+                status: .confirmed
+            )
+        }
 
         let meal = Meal(
             name: mealTitle,
@@ -305,6 +352,12 @@ struct FoodChatLogView: View {
         parsedResult = nil
         reviewItems = []
         messages.append(FoodChatMessage(role: .assistant, text: "Added to today. You can still edit it from Meals."))
+        if let confirmedResult {
+            let service = correctionMemoryService
+            Task {
+                await service.rememberCorrections(from: confirmedResult)
+            }
+        }
         dismiss()
     }
 
@@ -602,12 +655,18 @@ private struct FoodReviewItemCard: View {
 
                 Spacer()
 
-                Text("\(Int((item.confidence * 100).rounded()))% sure")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .foregroundStyle(appTheme.deepAccent.opacity(0.84))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 7)
-                    .background(.white.opacity(0.56), in: Capsule())
+                VStack(alignment: .trailing, spacing: 8) {
+                    Text("\(Int((item.confidence * 100).rounded()))% sure")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(appTheme.deepAccent.opacity(0.84))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 7)
+                        .background(.white.opacity(0.56), in: Capsule())
+
+                    if item.candidateOptions.count > 1 {
+                        candidateMenu
+                    }
+                }
             }
 
             GramRangeSlider(item: $item)
@@ -628,6 +687,39 @@ private struct FoodReviewItemCard: View {
                         .stroke(.white.opacity(0.76), lineWidth: 1)
                 )
         )
+    }
+
+    private var candidateMenu: some View {
+        Menu {
+            ForEach(item.candidateOptions) { candidate in
+                Button {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.84)) {
+                        item.select(candidate)
+                    }
+                } label: {
+                    Label(
+                        candidateMenuTitle(candidate),
+                        systemImage: candidate.id == item.providerCandidateID
+                            ? "checkmark"
+                            : "circle"
+                    )
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(appTheme.deepAccent)
+                .frame(width: 34, height: 30)
+                .background(.white.opacity(0.62), in: RoundedRectangle(cornerRadius: 8))
+        }
+        .accessibilityLabel("Change food match")
+    }
+
+    private func candidateMenuTitle(_ candidate: ParsedFoodCandidate) -> String {
+        let detail = candidate.brandOwner?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? candidate.providerDataType
+            ?? candidate.source.rawValue
+        return "\(candidate.name) · \(detail) · \(Int(candidate.estimatedGrams.rounded()))g"
     }
 
     private func macroBadge(_ title: String, _ value: String) -> some View {
@@ -735,6 +827,12 @@ private struct ParsedFoodItemDraft: Identifiable {
     var baseFat: Double
     var confidence: Double
     var source: FoodLogSource
+    var sourcePhrase: String?
+    var providerCandidateID: String?
+    var providerID: String?
+    var providerDataType: String?
+    var brandOwner: String?
+    var candidateOptions: [ParsedFoodCandidate]
 
     init(item: ParsedFoodItem) {
         self.id = item.id
@@ -751,6 +849,32 @@ private struct ParsedFoodItemDraft: Identifiable {
         self.baseFat = item.estimatedFat
         self.confidence = item.confidence
         self.source = item.source
+        self.sourcePhrase = item.sourcePhrase
+        self.providerCandidateID = item.providerCandidateID
+        self.providerID = item.providerID
+        self.providerDataType = item.providerDataType
+        self.brandOwner = item.brandOwner
+        self.candidateOptions = item.candidateOptions
+    }
+
+    mutating func select(_ candidate: ParsedFoodCandidate) {
+        name = candidate.name
+        detectedQuantity = candidate.detectedQuantity
+        estimatedServing = candidate.estimatedServing
+        estimatedGrams = candidate.estimatedGrams
+        minSuggestedGrams = candidate.minSuggestedGrams
+        maxSuggestedGrams = candidate.maxSuggestedGrams
+        baseGrams = max(candidate.estimatedGrams, 1)
+        baseCalories = candidate.estimatedCalories
+        baseProtein = candidate.estimatedProtein
+        baseCarbs = candidate.estimatedCarbs
+        baseFat = candidate.estimatedFat
+        confidence = candidate.confidence
+        source = candidate.source
+        providerCandidateID = candidate.id
+        providerID = candidate.providerID
+        providerDataType = candidate.providerDataType
+        brandOwner = candidate.brandOwner
     }
 
     private var scale: Double {

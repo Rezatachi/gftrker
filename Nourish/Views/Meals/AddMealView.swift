@@ -20,7 +20,9 @@ struct AddMealView: View {
     @State private var showingManageFavorites = false
     @State private var templateSaveConfirmation: String?
     @FocusState private var focusedField: Field?
+#if DEBUG
     private let recognitionService: FoodRecognitionService = MockFoodRecognitionService()
+#endif
 
     var body: some View {
         NavigationStack {
@@ -133,16 +135,18 @@ struct AddMealView: View {
                     }
 
                     if selectedImage != nil {
+#if DEBUG
                         Button {
                             Task { await detectFoods() }
                         } label: {
                             actionPill(title: isDetecting ? "Reading..." : "Suggest", icon: "sparkles")
                         }
                         .disabled(isDetecting)
+#endif
                     }
                 }
 
-                Text("Photo detection only creates editable suggestions. Nothing is logged until you confirm it.")
+                Text("The photo stays on this device and is saved only when you save the meal.")
                     .font(NourishTypography.caption)
                     .foregroundStyle(NourishColors.muted)
             }
@@ -714,10 +718,12 @@ struct AddMealView: View {
     }
 
     private func detectFoods() async {
+#if DEBUG
         guard let selectedImage else { return }
         isDetecting = true
         defer { isDetecting = false }
         detectedFoods = (try? await recognitionService.detectFoods(in: selectedImage)) ?? []
+#endif
     }
 
     private func saveMeal() {
